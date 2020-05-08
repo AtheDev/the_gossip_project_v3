@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+skip_before_action :verify_authenticity_token
+before_action :authenticate_user, only: [:edit]
 
   def create
     @comment = Comment.new(gossip_id: params[:gossip],
@@ -35,7 +37,15 @@ class CommentsController < ApplicationController
     @comment.destroy
 
     redirect_to gossip_path(@comment.gossip.id)
+  end
 
+  private
+
+  def authenticate_user
+    unless current_user
+      flash[:danger] = "Please log in."
+      redirect_to new_session_path
+    end
   end
 
 end

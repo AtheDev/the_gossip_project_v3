@@ -1,5 +1,5 @@
 class LikesController < ApplicationController
-
+skip_before_action :verify_authenticity_token
 
   def create
     @like = Like.new('gossip_id' => params[:gossip],
